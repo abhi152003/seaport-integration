@@ -7,6 +7,11 @@ import { useState } from "react";
 
 const SeaportIntegration = () => {
   const [order, setOrder] = useState(null);
+  const offerToken = "0x45cc23c87767Bb1B04E916EEc2b7ccbD82c90a9d";
+  const considerationToken = "0xf3FfD66A6Eb91a973917688CE56375768f754db5";
+  const offerIdentifier = "4";
+  const considerationIdentifier = "0";
+  const amount = "1";  // If ItemType is ERC20 or ERC721 or ERC1155 then the value should be in integer and if it's a native token then it can be in decimal
 
   const handleSellerClick = async () => {
     try {
@@ -14,26 +19,26 @@ const SeaportIntegration = () => {
       const seaport = new Seaport(provider);
 
       const signer = provider.getSigner();
-      // console.log((await signer).getAddress)
       const accountAddress = await signer;
 
       const {address} = accountAddress
-      console.log('addressssss', address);
-
       const offerer = address;
-      const fulfiller = "0x21F44B7EF8AC550372bfbAb467F6Ad314717e10D";
+
       const { executeAllActions } = await seaport.createOrder(
         {
           offer: [
             {
               itemType: ItemType.ERC1155,
-              token: "0x45cc23c87767Bb1B04E916EEc2b7ccbD82c90a9d",
-              identifier: "0",
+              token: offerToken,
+              identifier: offerIdentifier,
             },
           ],
           consideration: [
             {
-              amount: ethers.parseEther("0.0001").toString(),
+              itemType: ItemType.ERC20,
+              token: considerationToken,
+              identifier: considerationIdentifier,
+              amount: ethers.parseEther(amount).toString(),
               recipient: offerer,
             },
           ],
@@ -43,15 +48,6 @@ const SeaportIntegration = () => {
 
       const order = await executeAllActions();
       setOrder(order);
-      console.log("adresss::::::::::::: ",address)
-
-      // const { executeAllActions: executeAllFulfillActions } =
-      //   await seaport.fulfillOrder({
-      //     order,
-      //     accountAddress: fulfiller,
-      //   });
-
-      // const transaction = executeAllFulfillActions();
       console.log("Order:", order);
     } catch (error) {
       console.error("Error:", error);
@@ -64,15 +60,9 @@ const SeaportIntegration = () => {
       const seaport = new Seaport(provider);
 
       const signer = provider.getSigner();
-      // console.log((await signer).getAddress)
       const accountAddress = await signer;
 
       const {address} = accountAddress
-      console.log('addressssss', address);
-
-      // const order = await executeAllActions();
-
-      console.log("adresss::::::::::::: ",address)
 
       if (!order) {
         console.error("No order available. Please create an order first.");
