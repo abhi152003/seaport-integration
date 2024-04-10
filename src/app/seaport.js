@@ -7,11 +7,13 @@ import { useState } from "react";
 
 const SeaportIntegration = () => {
   const [order, setOrder] = useState(null);
-  const offerToken = "0x45cc23c87767Bb1B04E916EEc2b7ccbD82c90a9d";
+  const offerToken = "0x1d8152570189B00ddeec85Aa9a4e090a8Acf7342";
   const considerationToken = "0xf3FfD66A6Eb91a973917688CE56375768f754db5";
-  const offerIdentifier = "4";
+  const offerIdentifier = "0";
   const considerationIdentifier = "0";
-  const amount = "1";  // If ItemType is ERC20 or ERC721 or ERC1155 then the value should be in integer and if it's a native token then it can be in decimal
+  const amount = "0.03";  // If ItemType is ERC20 or ERC721 or ERC1155 then the value should be in integer and if it's a native token then it can be in decimal
+  const [offerItemType, setOfferItemType] = useState(ItemType.ERC721); // Dynamic state for offer item type
+  const [considerationItemType, setConsiderationItemType] = useState(ItemType.NATIVE);
 
   const handleSellerClick = async () => {
     try {
@@ -24,23 +26,31 @@ const SeaportIntegration = () => {
       const {address} = accountAddress
       const offerer = address;
 
+      const fees = 0.025 * amount;
+      const amountAfterFees = amount - fees;
+      const feesRec = "0xba35722Ff8C8413f804dfA408c55181CCfB7F97B"
+
       const { executeAllActions } = await seaport.createOrder(
         {
           offer: [
             {
-              itemType: ItemType.ERC1155,
+              itemType: offerItemType,
               token: offerToken,
               identifier: offerIdentifier,
             },
           ],
           consideration: [
             {
-              itemType: ItemType.ERC20,
-              token: considerationToken,
-              identifier: considerationIdentifier,
-              amount: ethers.parseEther(amount).toString(),
+              //itemType: considerationItemType,
+              //token: considerationToken,
+              //identifier: considerationIdentifier,
+              amount: ethers.parseEther((amountAfterFees).toString()).toString(),
               recipient: offerer,
             },
+            {
+              amount: ethers.parseEther((fees.toString())).toString(),
+              recipient: feesRec
+            }
           ],
         },
         offerer

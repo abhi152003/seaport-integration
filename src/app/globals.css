@@ -100,6 +100,44 @@ a {
   text-decoration: none;
 }
 
+ul{
+  list-style-type: none;
+}
+
+li {
+  list-style-type: none;
+}
+
+.nft {
+  background-color: green;
+  border: none;
+  height: 50px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.nft_det {
+  background-color: blue;
+  margin-top: -20px;
+  margin-bottom: 20px;
+}
+
+.nft_det button {
+  width: 100px;
+  height: 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.nft-buy {
+  color: black;
+}
+
+.input {
+  width: 500px;
+}
+
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
