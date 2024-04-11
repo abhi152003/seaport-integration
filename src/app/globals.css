@@ -138,6 +138,12 @@ li {
   width: 500px;
 }
 
+.collection_list li {
+  margin-bottom: 10px;
+  background-color: green;
+  cursor: pointer;
+}
+
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
